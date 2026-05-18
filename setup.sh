@@ -212,3 +212,13 @@ tutor dev start mfe
 
 tutor dev do createuser --staff --superuser -p openedx openedx openedx@example.com
 tutor dev do importdemocourse
+
+# Setup the brand for local dev
+tutor images build paragon-builder
+tutor_root="$(tutor config printroot)"
+[ -n "$tutor_root" ] \
+  && rm -rf "$tutor_root/env/plugins/paragon/theme-sources/themes" \
+  && cp -r brand-sample/tokens/src/themes "$tutor_root/env/plugins/paragon/theme-sources" \
+  && tutor dev do paragon-build-tokens \
+  && echo 'Compiled design tokens :)' \
+  || echo 'Could not copy design token sources into tutor environment :('
